@@ -1,0 +1,310 @@
+{% load static %}
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sec C + Cot A Solver</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Calibri, sans-serif;
+    }
+    body {
+      background: #f6f8fb;
+      padding: 20px;
+      color: #333;
+      font-size: 27px;
+      font-weight: bold;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      gap: 80px;
+    }
+
+    .triangle-diagram {
+      position: relative;
+      width: 240px;
+      height: 140px;
+      margin: 40px auto;
+    }
+
+    .side.ab {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 4px;
+      height: 140px;
+      background: black;
+    }
+
+    .side.bc {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 240px;
+      height: 4px;
+      background: black;
+    }
+
+    .side-ac-line {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+    }
+
+    .label {
+      position: absolute;
+      font-weight: bold;
+      background: white;
+      padding: 2px 6px;
+      border-radius: 6px;
+      box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+      color: black;
+    }
+
+    .point-a { top: -20px; left: -15px; background-color: #ED8392; }
+    .point-b { bottom: -25px; left: -15px; background-color: #7BC3EC; }
+    .point-c { bottom: -25px; right: -15px; background-color: #B7F3F0; }
+
+    .dimension {
+      position: absolute;
+      background: white;
+      padding: 2px 6px;
+      border-radius: 10px;
+      box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+    }
+
+    .ab-label { left: -40px; top: 45px; background: linear-gradient(to top, #F5FAFF, #3399FF); }
+    .bc-label { bottom: -35px; left: 90px; background: linear-gradient(to top, #F9FAD6, #F3DDFF); }
+    .ac-label { top: 40px; right: 90px; background: linear-gradient(to top, #F3DDFF, #FEB78A); }
+
+    .formula-table {
+      background: #222;
+      color: white;
+      border-radius: 10px;
+      padding: 10px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .explanation-box-1 {
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      width: fit-content;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .math-box {
+      border-radius: 12px;
+      padding: 10px 20px;
+      margin: 10px 0;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .fraction {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .line-by { width: 40px; height: 3px; background: gray; }
+    .linel-by { width: 140px; height: 3px; background: white; }
+
+    .fraction-container {
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      gap: 6px;
+    }
+
+    .answer-box {
+      font-size: 30px;
+      background-color: #1BAD83;
+      color: white;
+      padding: 6px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+      margin-left: 10px;
+      box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+    }
+
+    .formulaBoxUltimate {
+      width: 298px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 10px;
+    }
+
+    .arrow-img { width: 50px; }
+
+    /* Input section */
+    .input-box {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    .input-box input {
+      width: 70px;
+      padding: 6px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .solve-btn {
+      padding: 6px 18px;
+      background-color: #1BAD83;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .solve-btn:hover { background-color: #159c76; }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div>
+      <!-- Input section -->
+      <div class="input-box">
+        A: <input type="number" id="inputA" value="7">
+        B: <input type="number" id="inputB" value="24">
+        C: <input type="number" id="inputC" value="25">
+        <button class="solve-btn" onclick="solve()">Solve</button>
+      </div>
+
+      <div class="explanation-box-1">
+        <div class="math-box" id="abc-equation">
+          A<span style="color:#ED8392;">C</span> - B<span style="color:#7BC3EC;">C</span> = 1
+        </div>
+        <div style="border: 2px solid #ccc;border-radius: 10px;background: #F2F2F2;">
+          <div class="math-box" id="pythagorean">
+            25 - 24 = 1 &nbsp;&nbsp;&nbsp;&nbsp; 25² - 24² = 7²
+            <div><img src="{% static 'arrow.png' %}" alt="arrow" class="arrow-img"></div>
+          </div>
+        </div>
+        <div class="fraction-container" id="formula">
+          (Sec C + Cot A) =
+          <div class="fraction">
+            <div id="secC-num">25</div>
+            <div class="line-by"></div>
+            <div id="secC-den">24</div>
+          </div>
+          &nbsp;+&nbsp;
+          <div class="fraction">
+            <div id="cotA-num">7</div>
+            <div class="line-by"></div>
+            <div id="cotA-den">24</div>
+          </div>
+        </div>
+        <div class="fraction-container" style="margin-left: 190px;">
+          <span>=</span>
+          <div class="answer-box" id="finalAnswer">4 / 3</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex;flex-direction: column;">
+      <div class="triangle-diagram">
+        <div class="side ab"></div>
+        <div class="side bc"></div>
+
+        <svg class="side-ac-line" width="240" height="140">
+          <polygon points="0,140 0,0 240,140" fill="rgba(173, 216, 230, 0.2)" />
+          <line x1="0" y1="0" x2="240" y2="140" stroke="black" stroke-width="4" />
+        </svg>
+
+        <div class="label point-a">A</div>
+        <div class="label point-b">B</div>
+        <div class="label point-c">C</div>
+        <div class="dimension ab-label" id="sideAB">7 cm</div>
+        <div class="dimension bc-label" id="sideBC">24 cm</div>
+        <div class="dimension ac-label" id="sideAC">25 cm</div>
+      </div>
+
+      <div class="formulaBoxUltimate">
+        <div class="formula-table" style="border-radius: 10px 10px 0 0;">
+          <div class="fraction-container">
+            Sec <span style="background:#b3d8f1; color:black; padding:4px 8px; border-radius:6px;">C</span> =
+            <div class="fraction">
+              <div>Hypotenuse</div>
+              <div class="linel-by"></div>
+              <div>Base</div>
+            </div>
+          </div>
+        </div>
+        <div class="formula-table" style="border-radius: 0 0 10px 10px;">
+          <div class="fraction-container">
+            Cot <span style="background:#f79ba2; color:black; padding:4px 8px; border-radius:6px;">A</span> =
+            <div class="fraction">
+              <div>Perpendicular</div>
+              <div class="linel-by"></div>
+              <div>Base</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function solve() {
+      const A = document.getElementById("inputA").value;
+      const B = document.getElementById("inputB").value;
+      const C = document.getElementById("inputC").value;
+
+      const url = `/api?A=${A}&B=${B}&C=${C}`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+
+      document.getElementById("sideAB").textContent = `${A} cm`;
+      document.getElementById("sideBC").textContent = `${B} cm`;
+      document.getElementById("sideAC").textContent = `${C} cm`;
+
+      document.getElementById("secC-num").textContent = data.sec.numerator;
+      document.getElementById("secC-den").textContent = data.sec.denominator;
+
+      document.getElementById("cotA-num").textContent = data.cot.numerator;
+      document.getElementById("cotA-den").textContent = data.cot.denominator;
+
+      document.getElementById("finalAnswer").textContent = data.finalAnswer.value;
+
+      document.getElementById("pythagorean").innerHTML = 
+        `${C}² - ${B}² = ${A}² &nbsp;&nbsp;&nbsp;&nbsp; (${C}² - ${B}² = ${A}²)
+        <div><img src="{% static 'arrow.png' %}" alt="arrow" class="arrow-img"></div>`;
+
+      document.getElementById("abc-equation").innerHTML = 
+        `${C} - ${B} = 1`;
+    }
+  </script>
+</body>
+</html>
