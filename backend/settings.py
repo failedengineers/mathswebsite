@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-zfsh#ykgvn^#hmjzd+a5-uxv3z0@#%7@ie-%bh178)l_4f--jk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["mathswebsite-v36z.onrender.com", "127.0.0.1", "localhost"]
+
 
 
 # Application definition
